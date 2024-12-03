@@ -12,13 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -35,6 +30,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.unibz.songplayer.data.Album
@@ -53,10 +49,12 @@ val gradientBrush =
 fun PlaySongLayout(
     album: Album,
     song: Song,
+    isPlaying: Boolean,
     onNextButtonClicked: () -> Unit = {},
     onPrevButtonClicked: () -> Unit = {},
     onPlayButtonClicked: () -> Unit = {},
     onBackButtonClicked: () -> Unit = {},
+    onSongIsFinished: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     // App State
@@ -103,29 +101,25 @@ fun PlaySongLayout(
                 text = song.title,
                 modifier = modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = song.artist,
                 modifier = modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
             )
             Text(
                 text = album.title,
                 modifier = modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
             )
             Row {
-                /*
-                IconButton(onClick = onPrevButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "PREV"
-                    )
-                }
-                */
                 FilledTonalButton(onClick = onPrevButtonClicked ) {
                     Text("PREV"/* stringResource(R.string.next) */)
                 }
@@ -148,7 +142,8 @@ fun PlaySongPreview() {
     SongPlayerTheme() {
         PlaySongLayout(
             album = album,
-            song = song
+            song = song,
+            isPlaying = false
         )
     }
 }

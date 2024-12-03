@@ -60,6 +60,7 @@ fun SongPlayerApp (
                 PlaySongLayout(
                     album = albums[uiState.currentAlbumId],
                     song = albums[uiState.currentAlbumId].songs[uiState.currentSongId],
+                    isPlaying = !uiState.songPaused,
                     onBackButtonClicked = { returnToSongSelection(viewModel, navController) },
                     onPlayButtonClicked = { playPauseSong(viewModel) },
                     onNextButtonClicked = { skipToNextSong(viewModel) },
