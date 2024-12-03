@@ -5,24 +5,29 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -111,14 +116,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PlaySongLayout(modifier: Modifier = Modifier) {
     // App State
-    var songId by remember { mutableStateOf(0) }
-    var albumId by remember { mutableStateOf(0) }
+    var songId by remember { mutableIntStateOf(0) }
+    var albumId by remember { mutableIntStateOf(0) }
+    var songProgress by remember { mutableFloatStateOf(0.0f) }
 
-    val album = albums.get(albumId)
-    val song = album.songs.get(songId)
+    val album = albums[albumId]
+    val song = album.songs[songId]
 
     Box(modifier = Modifier
-        .background(brush = gradientBrush)
+        /*.background(brush = gradientBrush)*/
         .fillMaxSize()
         .wrapContentSize(Alignment.Center)
     ) {
@@ -126,20 +132,41 @@ fun PlaySongLayout(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Image(
-                painter = painterResource(album.albumArt),
-                contentDescription = "sunrise image",
+            Row {
+                OutlinedButton(onClick = { /* TODO Go to Album Selection */ }) {
+                    Text("Go Back"/* stringResource(R.string.next) */)
+                }
+            }
+            Button(onClick = { /* TODO Go to Album Song List */ }) {
+                Image(
+                    painter = painterResource(album.albumArt),
+                    contentDescription = "sunrise image",
+                    modifier = Modifier
+                        .height(250.dp)
+                        .clip(
+                            RoundedCornerShape(
+                                topEnd = 8.dp,
+                                topStart = 8.dp,
+                                bottomStart = 8.dp,
+                                bottomEnd = 8.dp
+                            )
+                        ),
+                    contentScale = ContentScale.Fit
+                )
+            }
+            Spacer(Modifier.height(12.dp))
+            LinearProgressIndicator(
+                progress = { songProgress },
                 modifier = Modifier
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(topEnd = 8.dp , topStart = 8.dp, bottomStart = 8.dp, bottomEnd = 8.dp)),
-                contentScale = ContentScale.Fit
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp),
             )
             Spacer(Modifier.height(12.dp))
             Text(
                 text = song.title,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.displaySmall
             )
             Text(
                 text = song.artist,
@@ -154,13 +181,13 @@ fun PlaySongLayout(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.titleMedium
             )
             Row {
-                Button(onClick = { /* TODO */ }) {
+                FilledTonalButton(onClick = { /* TODO Previous song */ }) {
                     Text("PREV"/* stringResource(R.string.next) */)
                 }
-                Button(onClick = { /* TODO */ }) {
+                Button(onClick = { /* TODO Start/Stop Song */ }) {
                     Text("PLAY/PAUSE"/* stringResource(R.string.next) */)
                 }
-                Button(onClick = { /* TODO */ }) {
+                FilledTonalButton(onClick = { /* TODO Next song */ }) {
                     Text("NEXT"/* stringResource(R.string.next) */)
                 }
             }
