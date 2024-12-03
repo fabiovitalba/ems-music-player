@@ -16,8 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -40,53 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
-
-val deusCulpaGhost = Song("Deus Culpa", "Ghost")
-val conClaviConDio = Song("Con Clavi Con Dio","Ghost")
-val ritualGhost = Song("Ritual","Ghost")
-val opusEponymousSongList = listOf(
-    deusCulpaGhost,
-    conClaviConDio,
-    ritualGhost
-)
-val opusEponymousGhost = Album("Opus Eponymous","Ghost",opusEponymousSongList,R.drawable.ghost_opus_eponymous)
-
-val meineKneipeVonWegenLisbeth = Song("Meine Kneipe","Von Wegen Lisbeth")
-val cherieVonWegenLisbeth = Song("Chérie","Von Wegen Lisbeth")
-val wennDuTanztVonWegenLisbeth = Song("Wenn du tanzt","Von Wegen Lisbeth")
-val grandeSongList = listOf(
-    meineKneipeVonWegenLisbeth,
-    cherieVonWegenLisbeth,
-    wennDuTanztVonWegenLisbeth
-)
-val grandeVonWegenLisbeth = Album("GRANDE","Von Wegen Lisbeth",grandeSongList,R.drawable.von_wegen_lisbeth_grande)
-
-val wiesoVonWegenLisbeth = Song("Wieso","Von Wegen Lisbeth")
-val lieferandomannVonWegenLisbeth = Song("Lieferandomann","Von Wegen Lisbeth")
-val alexaGibMirMeinGeldZurueckVonWegenLisbeth = Song("Alexa gib mir mein Geld zurück!","Von Wegen Lisbeth")
-val sweetLilly93AtHotmailDotComSongList = listOf(
-    wiesoVonWegenLisbeth,
-    lieferandomannVonWegenLisbeth,
-    alexaGibMirMeinGeldZurueckVonWegenLisbeth
-)
-val sweetLilly93AtHotmailDotComVonWegenLisbeth = Album("sweetlilly93@hotmail.com","Von Wegen Lisbeth",sweetLilly93AtHotmailDotComSongList,R.drawable.von_wegen_lisbeth_sweetlilly93_at_hotmail_com)
-
-val heavyIsTheCrownMikeShinoda = Song("Heavy Is The Crown","Mike Shinoda,Emily Armstrong")
-val iCantHearItNowFreyaRidings = Song("I Can't Hear It Now","Freya Ridings")
-val suckerMarcusKing = Song("Sucker","Marcus King")
-val arcaneSongList = listOf(
-    heavyIsTheCrownMikeShinoda,
-    iCantHearItNowFreyaRidings,
-    suckerMarcusKing
-)
-val arcaneLeagueOfLegends = Album("Arcane League of Legends: Season 2 (Soundtrack)","Various",arcaneSongList,R.drawable.league_of_legends_arcane_season_two_soundtrack)
-
-val albums = listOf(
-    opusEponymousGhost,
-    grandeVonWegenLisbeth,
-    sweetLilly93AtHotmailDotComVonWegenLisbeth,
-    arcaneLeagueOfLegends
-)
+import com.unibz.songplayer.data.Datasource
 
 val gradientBrush =
     Brush.verticalGradient(
@@ -120,6 +76,7 @@ fun PlaySongLayout(modifier: Modifier = Modifier) {
     var albumId by remember { mutableIntStateOf(0) }
     var songProgress by remember { mutableFloatStateOf(0.0f) }
 
+    val albums = Datasource().loadAlbums()
     val album = albums[albumId]
     val song = album.songs[songId]
 
@@ -192,6 +149,64 @@ fun PlaySongLayout(modifier: Modifier = Modifier) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SongListLayout(modifier: Modifier = Modifier) {
+}
+
+@Composable
+fun AlbumsListLayout(albumList: List<Album>, modifier: Modifier = Modifier) {
+    LazyColumn( modifier = modifier ) {
+        items(albumList) { album ->
+            AlbumCard(album, modifier)
+        }
+    }
+}
+
+@Composable
+fun AlbumCard(album: Album, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
+        Column {
+            Image(
+                painter = painterResource(album.albumArt),
+                contentDescription = "${album.title} - ${album.mainArtist}",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = "${album.title} - ${album.mainArtist}",
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AlbumsCardLayoutPreview() {
+    SongPlayerTheme {
+        AlbumCard(Datasource().loadAlbums()[0])
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AlbumsListLayoutPreview() {
+    SongPlayerTheme {
+        AlbumsListLayout(Datasource().loadAlbums())
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SelectAlbumSongPreview() {
+    SongPlayerTheme {
+        SongListLayout()
     }
 }
 
