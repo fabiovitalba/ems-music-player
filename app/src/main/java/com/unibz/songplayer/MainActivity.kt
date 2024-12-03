@@ -32,7 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -73,9 +73,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PlaySongLayout(modifier: Modifier = Modifier) {
     // App State
-    var songId by remember { mutableIntStateOf(0) }
-    var albumId by remember { mutableIntStateOf(0) }
-    var songProgress by remember { mutableFloatStateOf(0.0f) }
+    var songId by rememberSaveable { mutableIntStateOf(0) }
+    var albumId by rememberSaveable { mutableIntStateOf(0) }
+    var songProgress by rememberSaveable { mutableFloatStateOf(0.0f) }
 
     val albums = Datasource().loadAlbums()
     val album = albums[albumId]
@@ -169,7 +169,7 @@ fun SongCardLayout(songId: Int, song: Song, modifier: Modifier = Modifier) {
             Text(
                 text = "${songId+1}. ${song.title}",
                 modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineMedium
             )
             Text(
                 text = song.artist,
