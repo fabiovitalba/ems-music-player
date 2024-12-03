@@ -58,7 +58,12 @@ fun SongPlayerApp (
             }
             composable(route = SongPlayerScreen.PlaySong.name) {
                 PlaySongLayout(
-
+                    album = albums[uiState.currentAlbumId],
+                    song = albums[uiState.currentAlbumId].songs[uiState.currentSongId],
+                    onBackButtonClicked = { returnToSongSelection(viewModel, navController) },
+                    onPlayButtonClicked = { playPauseSong(viewModel) },
+                    onNextButtonClicked = { skipToNextSong(viewModel) },
+                    onPrevButtonClicked = { skipToPreviousSong(viewModel) }
                 )
             }
         }
@@ -89,4 +94,23 @@ private fun returnToAlbumSelection(
 ) {
     viewModel.resetSongPlayer()
     navController.popBackStack(SongPlayerScreen.AlbumList.name, inclusive = false)
+}
+
+private fun returnToSongSelection(
+    viewModel: SongPlayerViewModel,
+    navController: NavHostController
+) {
+    navController.popBackStack(SongPlayerScreen.SongList.name, inclusive = false)
+}
+
+private fun playPauseSong(viewModel: SongPlayerViewModel) {
+    viewModel.playPauseSong()
+}
+
+private fun skipToNextSong(viewModel: SongPlayerViewModel) {
+    viewModel.nextSong()
+}
+
+private fun skipToPreviousSong(viewModel: SongPlayerViewModel) {
+    viewModel.previousSong()
 }
