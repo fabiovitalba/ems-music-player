@@ -1,11 +1,15 @@
 package com.unibz.songplayer.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,28 +20,47 @@ import com.unibz.songplayer.data.Song
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
 
 @Composable
-fun SongListLayout(songList: List<Song>, modifier: Modifier = Modifier) {
+fun SongListLayout(
+    songList: List<Song>,
+    onSelectSong: (songIndex: Int) -> Unit = {},
+    onBackButtonClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    OutlinedButton(
+        onClick = onBackButtonClicked
+    ) {
+        Text("Go Back"/* stringResource(R.string.goBack) */)
+    }
+    Spacer(Modifier.height(12.dp))
     LazyColumn( modifier = modifier ) {
         itemsIndexed(songList) { index, song ->
-            SongCardLayout(index, song, modifier)
+            SongCardLayout(index, song, onSelectSong, modifier)
         }
     }
 }
 
 @Composable
-fun SongCardLayout(songId: Int, song: Song, modifier: Modifier = Modifier) {
+fun SongCardLayout(
+    songId: Int,
+    song: Song,
+    onSelectSong: (songIndex: Int) -> Unit = {},
+    modifier: Modifier = Modifier) {
     Card(modifier = modifier) {
-        Column {
-            Text(
-                text = "${songId+1}. ${song.title}",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Text(
-                text = song.artist,
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.headlineSmall
-            )
+        Button(
+            onClick = { onSelectSong(songId) }
+        ) {
+            Column {
+                Text(
+                    text = "${songId+1}. ${song.title}",
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Text(
+                    text = song.artist,
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
         }
     }
 }

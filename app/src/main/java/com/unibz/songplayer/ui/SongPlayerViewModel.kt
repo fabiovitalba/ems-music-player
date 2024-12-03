@@ -25,7 +25,7 @@ class SongPlayerViewModel : ViewModel() {
         playlist = mutableListOf() // Empty List
     }
 
-    fun selectAlbum(selectedAlbumTitle: String) {
+    fun selectAlbumByName(selectedAlbumTitle: String) {
         albums.forEachIndexed() { index, album ->
             if (album.title.equals(selectedAlbumTitle, ignoreCase = true)) {
                 _uiState.update { currentState ->
@@ -37,6 +37,28 @@ class SongPlayerViewModel : ViewModel() {
                     )
                 }
             }
+        }
+    }
+
+    fun selectAlbumById(selectedAlbumId: Int) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                currentAlbumId = selectedAlbumId,
+                currentSongId = 0,
+                currentSongProgress = 0.0f,
+                songPaused = currentState.songPaused
+            )
+        }
+    }
+
+    fun selectSongById(selectedSongId: Int) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                currentAlbumId = currentState.currentAlbumId,
+                currentSongId = selectedSongId,
+                currentSongProgress = 0.0f,
+                songPaused = currentState.songPaused
+            )
         }
     }
 

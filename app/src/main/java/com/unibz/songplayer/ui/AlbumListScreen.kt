@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,31 +23,44 @@ import com.unibz.songplayer.data.Datasource
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
 
 @Composable
-fun AlbumsListLayout(albumList: List<Album>, modifier: Modifier = Modifier) {
+fun AlbumsListLayout(
+    albumList: List<Album>,
+    onSelectAlbum: (albumIndex: Int) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     LazyColumn( modifier = modifier ) {
-        items(albumList) { album ->
-            AlbumCard(album, modifier)
+        itemsIndexed(albumList) { index, album ->
+            AlbumCard(index, album, onSelectAlbum, modifier)
         }
     }
 }
 
 @Composable
-fun AlbumCard(album: Album, modifier: Modifier = Modifier) {
+fun AlbumCard(
+    index: Int,
+    album: Album,
+    onSelectAlbum: (albumIndex: Int) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Card(modifier = modifier) {
         Column {
-            Image(
-                painter = painterResource(album.albumArt),
-                contentDescription = "${album.title} - ${album.mainArtist}",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = "${album.title} - ${album.mainArtist}",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.headlineSmall
-            )
+            Button(
+                onClick = { onSelectAlbum(index) }
+            ) {
+                Image(
+                    painter = painterResource(album.albumArt),
+                    contentDescription = "${album.title} - ${album.mainArtist}",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "${album.title} - ${album.mainArtist}",
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
         }
     }
 }
