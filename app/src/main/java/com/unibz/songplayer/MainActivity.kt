@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,13 +34,54 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
 
-val wennDuTanztVonWegenLisbeth = Song("Wenn du tanzt","Von Wegen Lisbeth","GRANDE",R.drawable.von_wegen_lisbeth_grande)
-val alexaGibMirMeinGeldZurueckVonWegenLisbeth = Song("Alexa gib mir mein Geld zurück!","Von Wegen Lisbeth","sweetlilly93@hotmail.com",R.drawable.von_wegen_lisbeth_sweetlilly93_at_hotmail_com)
-val ritualGhost = Song("Ritual","Ghost","Opus Eponymous",R.drawable.ghost_opus_eponymous)
-val suckerMarcusKing = Song("Sucker","Marcus King","", R.drawable.league_of_legends_arcane_season_two_soundtrack)
+val deusCulpaGhost = Song("Deus Culpa", "Ghost")
+val conClaviConDio = Song("Con Clavi Con Dio","Ghost")
+val ritualGhost = Song("Ritual","Ghost")
+val opusEponymousSongList = listOf(
+    deusCulpaGhost,
+    conClaviConDio,
+    ritualGhost
+)
+val opusEponymousGhost = Album("Opus Eponymous","Ghost",opusEponymousSongList,R.drawable.ghost_opus_eponymous)
+
+val meineKneipeVonWegenLisbeth = Song("Meine Kneipe","Von Wegen Lisbeth")
+val cherieVonWegenLisbeth = Song("Chérie","Von Wegen Lisbeth")
+val wennDuTanztVonWegenLisbeth = Song("Wenn du tanzt","Von Wegen Lisbeth")
+val grandeSongList = listOf(
+    meineKneipeVonWegenLisbeth,
+    cherieVonWegenLisbeth,
+    wennDuTanztVonWegenLisbeth
+)
+val grandeVonWegenLisbeth = Album("GRANDE","Von Wegen Lisbeth",grandeSongList,R.drawable.von_wegen_lisbeth_grande)
+
+val wiesoVonWegenLisbeth = Song("Wieso","Von Wegen Lisbeth")
+val lieferandomannVonWegenLisbeth = Song("Lieferandomann","Von Wegen Lisbeth")
+val alexaGibMirMeinGeldZurueckVonWegenLisbeth = Song("Alexa gib mir mein Geld zurück!","Von Wegen Lisbeth")
+val sweetLilly93AtHotmailDotComSongList = listOf(
+    wiesoVonWegenLisbeth,
+    lieferandomannVonWegenLisbeth,
+    alexaGibMirMeinGeldZurueckVonWegenLisbeth
+)
+val sweetLilly93AtHotmailDotComVonWegenLisbeth = Album("sweetlilly93@hotmail.com","Von Wegen Lisbeth",sweetLilly93AtHotmailDotComSongList,R.drawable.von_wegen_lisbeth_sweetlilly93_at_hotmail_com)
+
+val heavyIsTheCrownMikeShinoda = Song("Heavy Is The Crown","Mike Shinoda,Emily Armstrong")
+val iCantHearItNowFreyaRidings = Song("I Can't Hear It Now","Freya Ridings")
+val suckerMarcusKing = Song("Sucker","Marcus King")
+val arcaneSongList = listOf(
+    heavyIsTheCrownMikeShinoda,
+    iCantHearItNowFreyaRidings,
+    suckerMarcusKing
+)
+val arcaneLeagueOfLegends = Album("Arcane League of Legends: Season 2 (Soundtrack)","Various",arcaneSongList,R.drawable.league_of_legends_arcane_season_two_soundtrack)
+
+val albums = listOf(
+    opusEponymousGhost,
+    grandeVonWegenLisbeth,
+    sweetLilly93AtHotmailDotComVonWegenLisbeth,
+    arcaneLeagueOfLegends
+)
 
 val gradientBrush =
     Brush.verticalGradient(
@@ -53,9 +96,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SongPlayerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PlaySong(
-                        song = ritualGhost,
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
+                    PlaySongLayout(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -65,16 +109,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PlaySong(song: Song, modifier: Modifier = Modifier) {
-    var songId by remember { mutableStateOf(0) } // state value
+fun PlaySongLayout(modifier: Modifier = Modifier) {
+    // App State
+    var songId by remember { mutableStateOf(0) }
+    var albumId by remember { mutableStateOf(0) }
+
+    val album = albums.get(albumId)
+    val song = album.songs.get(songId)
+
     Box(modifier = Modifier
         .background(brush = gradientBrush)
         .fillMaxSize()
         .wrapContentSize(Alignment.Center)
     ) {
-        Column( horizontalAlignment = Alignment.CenterHorizontally ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
             Image(
-                painter = painterResource(song.darwableResource),
+                painter = painterResource(album.albumArt),
                 contentDescription = "sunrise image",
                 modifier = Modifier
                     .height(180.dp)
@@ -86,19 +139,19 @@ fun PlaySong(song: Song, modifier: Modifier = Modifier) {
                 text = song.title,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                fontSize = 12.sp
+                style = MaterialTheme.typography.displayMedium
             )
             Text(
                 text = song.artist,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                fontSize = 8.sp
+                style = MaterialTheme.typography.displaySmall
             )
             Text(
-                text = song.album,
+                text = album.title,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                fontSize = 6.sp
+                style = MaterialTheme.typography.displaySmall
             )
             Row {
                 Button(onClick = { /* TODO */ }) {
@@ -119,8 +172,6 @@ fun PlaySong(song: Song, modifier: Modifier = Modifier) {
 @Composable
 fun PlaySongPreview() {
     SongPlayerTheme {
-        PlaySong(
-            song = ritualGhost
-        )
+        PlaySongLayout()
     }
 }

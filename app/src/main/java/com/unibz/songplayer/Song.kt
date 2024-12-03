@@ -2,7 +2,7 @@ package com.unibz.songplayer
 
 import androidx.annotation.DrawableRes
 
-class Song(val title: String, val artist: String, val album: String, @DrawableRes var darwableResource: Int) {
+class Song(val title: String, val artist: String) {
     //fun play() {
     //    println("Playing '$title' by '$artist'.");
     //}
