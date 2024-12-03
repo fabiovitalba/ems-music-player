@@ -1,18 +1,32 @@
 package com.unibz.songplayer.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Button
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,25 +55,48 @@ fun AlbumCard(
     onSelectAlbum: (albumIndex: Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier) {
-        Column {
-            Button(
-                onClick = { onSelectAlbum(index) }
-            ) {
-                Image(
-                    painter = painterResource(album.albumArt),
-                    contentDescription = "${album.title} - ${album.mainArtist}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Text(
-                    text = "${album.title} - ${album.mainArtist}",
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+    val scrollState = rememberScrollState(0)
+    OutlinedCard(
+        modifier = modifier
+            .padding(16.dp),
+        onClick = { onSelectAlbum(index) },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
+        border = BorderStroke(1.dp, Color.Black)
+    ) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Image(
+                painter = painterResource(album.albumArt),
+                contentDescription = "${album.title} - ${album.mainArtist}",
+                modifier = modifier
+                    .fillMaxWidth()
+                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .drawWithContent {
+                        val colors = listOf(
+                            Color.Black,
+                            Color.Transparent
+                        )
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(colors),
+                            blendMode = BlendMode.DstIn
+                        )
+                    },
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = "${album.title} - ${album.mainArtist}",
+                modifier = modifier
+                    .padding(16.dp)
+                    .height(28.dp)
+                    .horizontalScroll(scrollState),
+                style = MaterialTheme.typography.headlineSmall,
+            )
         }
     }
 }
@@ -67,7 +104,7 @@ fun AlbumCard(
 @Preview(showBackground = true)
 @Composable
 fun AlbumsListLayoutPreview() {
-    SongPlayerTheme( darkTheme = true ) {
+    SongPlayerTheme() {
         AlbumsListLayout(Datasource().loadAlbums())
     }
 }

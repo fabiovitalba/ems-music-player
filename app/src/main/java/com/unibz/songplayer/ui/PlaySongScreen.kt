@@ -62,7 +62,7 @@ fun PlaySongLayout(
     // App State
     var songProgress by rememberSaveable { mutableFloatStateOf(0.0f) }
 
-    Box(modifier = Modifier
+    Box(modifier = modifier
         /*.background(brush = gradientBrush)*/
         .fillMaxSize()
         .wrapContentSize(Alignment.Center)
@@ -79,7 +79,7 @@ fun PlaySongLayout(
             Image(
                 painter = painterResource(album.albumArt),
                 contentDescription = album.title,
-                modifier = Modifier
+                modifier = modifier
                     .height(250.dp)
                     .clip(
                         RoundedCornerShape(
@@ -91,29 +91,29 @@ fun PlaySongLayout(
                     ),
                 contentScale = ContentScale.Fit
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(modifier.height(12.dp))
             LinearProgressIndicator(
                 progress = { songProgress },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp),
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(modifier.height(12.dp))
             Text(
                 text = song.title,
-                modifier = Modifier
+                modifier = modifier
                     .align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.displaySmall
             )
             Text(
                 text = song.artist,
-                modifier = Modifier
+                modifier = modifier
                     .align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = album.title,
-                modifier = Modifier
+                modifier = modifier
                     .align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.titleMedium
             )
@@ -145,7 +145,7 @@ fun PlaySongLayout(
 fun PlaySongPreview() {
     val album = Datasource().loadAlbums()[0]
     val song = album.songs[0]
-    SongPlayerTheme( darkTheme = true ) {
+    SongPlayerTheme() {
         PlaySongLayout(
             album = album,
             song = song

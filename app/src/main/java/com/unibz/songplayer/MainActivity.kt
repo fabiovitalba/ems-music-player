@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SongPlayerTheme( darkTheme = true ) {
+            SongPlayerTheme() {
                 SongPlayerApp()
             }
         }

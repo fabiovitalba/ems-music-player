@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,15 +27,17 @@ fun SongListLayout(
     onBackButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    OutlinedButton(
-        onClick = onBackButtonClicked
-    ) {
-        Text("Go Back"/* stringResource(R.string.goBack) */)
-    }
-    Spacer(Modifier.height(12.dp))
-    LazyColumn( modifier = modifier ) {
-        itemsIndexed(songList) { index, song ->
-            SongCardLayout(index, song, onSelectSong, modifier)
+    Column {
+        OutlinedButton(
+            onClick = onBackButtonClicked
+        ) {
+            Text("Go Back"/* stringResource(R.string.goBack) */)
+        }
+        Spacer(modifier.height(12.dp))
+        LazyColumn( modifier = modifier ) {
+            itemsIndexed(songList) { index, song ->
+                SongCardLayout(index, song, onSelectSong, modifier)
+            }
         }
     }
 }
@@ -45,22 +48,24 @@ fun SongCardLayout(
     song: Song,
     onSelectSong: (songIndex: Int) -> Unit = {},
     modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Button(
-            onClick = { onSelectSong(songId) }
-        ) {
-            Column {
-                Text(
-                    text = "${songId+1}. ${song.title}",
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Text(
-                    text = song.artist,
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+    OutlinedCard(
+        modifier = modifier
+            .padding(16.dp),
+        onClick = { onSelectSong(songId) }
+    ) {
+        Column {
+            Text(
+                text = "${songId+1}. ${song.title}",
+                modifier = modifier
+                    .padding(16.dp),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = song.artist,
+                modifier = modifier
+                    .padding(16.dp),
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
     }
 }
@@ -70,7 +75,7 @@ fun SongCardLayout(
 @Preview(showBackground = true)
 @Composable
 fun SelectAlbumSongPreview() {
-    SongPlayerTheme( darkTheme = true ) {
+    SongPlayerTheme() {
         SongListLayout(Datasource().loadAlbums()[0].songs)
     }
 }
