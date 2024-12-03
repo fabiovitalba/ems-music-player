@@ -1,6 +1,4 @@
-package com.unibz.songplayer
-
-import androidx.annotation.DrawableRes
+package com.unibz.songplayer.data
 
 data class Song(val title: String, val artist: String) {
     //fun play() {

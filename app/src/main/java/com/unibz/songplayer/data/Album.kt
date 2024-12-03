@@ -1,4 +1,4 @@
-package com.unibz.songplayer
+package com.unibz.songplayer.data
 
 import androidx.annotation.DrawableRes
 

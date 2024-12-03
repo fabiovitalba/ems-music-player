@@ -1,8 +1,6 @@
 package com.unibz.songplayer.data
 
-import com.unibz.songplayer.Album
 import com.unibz.songplayer.R
-import com.unibz.songplayer.Song
 
 class Datasource {
     fun loadAlbums(): List<Album> {
