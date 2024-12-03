@@ -12,8 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -67,7 +72,7 @@ fun PlaySongLayout(
             verticalArrangement = Arrangement.Top
         ) {
             Row {
-                OutlinedButton(onClick = { onBackButtonClicked }) {
+                OutlinedButton(onClick = onBackButtonClicked) {
                     Text("Go Back"/* stringResource(R.string.next) */)
                 }
             }
@@ -113,13 +118,21 @@ fun PlaySongLayout(
                 style = MaterialTheme.typography.titleMedium
             )
             Row {
-                FilledTonalButton(onClick = { onPrevButtonClicked }) {
+                /*
+                IconButton(onClick = onPrevButtonClicked) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "PREV"
+                    )
+                }
+                */
+                FilledTonalButton(onClick = onPrevButtonClicked ) {
                     Text("PREV"/* stringResource(R.string.next) */)
                 }
-                Button(onClick = { onPlayButtonClicked }) {
+                Button(onClick = onPlayButtonClicked ) {
                     Text("PLAY/PAUSE"/* stringResource(R.string.next) */)
                 }
-                FilledTonalButton(onClick = { onNextButtonClicked }) {
+                FilledTonalButton(onClick = onNextButtonClicked ) {
                     Text("NEXT"/* stringResource(R.string.next) */)
                 }
             }

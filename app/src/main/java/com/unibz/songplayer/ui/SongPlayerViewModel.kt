@@ -73,7 +73,7 @@ class SongPlayerViewModel : ViewModel() {
     fun nextSong() {
         val songs = albums[_uiState.value.currentAlbumId].songs
         val currSongId = _uiState.value.currentSongId
-        var nextSongId = if (currSongId >= songs.size) 0 else currSongId + 1
+        var nextSongId = if (currSongId >= songs.size - 1) 0 else currSongId + 1
         _uiState.update { currentState ->
             currentState.copy(
                 currentAlbumId = currentState.currentAlbumId,
