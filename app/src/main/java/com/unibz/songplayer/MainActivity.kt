@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SongPlayerTheme {
+            SongPlayerTheme( darkTheme = true ) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
@@ -153,7 +154,30 @@ fun PlaySongLayout(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SongListLayout(modifier: Modifier = Modifier) {
+fun SongListLayout(songList: List<Song>, modifier: Modifier = Modifier) {
+    LazyColumn( modifier = modifier ) {
+        itemsIndexed(songList) { index, song ->
+            SongCardLayout(index, song, modifier)
+        }
+    }
+}
+
+@Composable
+fun SongCardLayout(songId: Int, song: Song, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
+        Column {
+            Text(
+                text = "${songId+1}. ${song.title}",
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = song.artist,
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
+    }
 }
 
 @Composable
@@ -188,16 +212,8 @@ fun AlbumCard(album: Album, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun AlbumsCardLayoutPreview() {
-    SongPlayerTheme {
-        AlbumCard(Datasource().loadAlbums()[0])
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
 fun AlbumsListLayoutPreview() {
-    SongPlayerTheme {
+    SongPlayerTheme( darkTheme = true ) {
         AlbumsListLayout(Datasource().loadAlbums())
     }
 }
@@ -205,15 +221,15 @@ fun AlbumsListLayoutPreview() {
 @Preview(showBackground = true)
 @Composable
 fun SelectAlbumSongPreview() {
-    SongPlayerTheme {
-        SongListLayout()
+    SongPlayerTheme( darkTheme = true ) {
+        SongListLayout(Datasource().loadAlbums()[0].songs)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PlaySongPreview() {
-    SongPlayerTheme {
+    SongPlayerTheme( darkTheme = true ) {
         PlaySongLayout()
     }
 }
