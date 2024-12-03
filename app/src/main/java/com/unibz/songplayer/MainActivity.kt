@@ -139,19 +139,19 @@ fun PlaySongLayout(modifier: Modifier = Modifier) {
                 text = song.title,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
                 text = song.artist,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = album.title,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.titleMedium
             )
             Row {
                 Button(onClick = { /* TODO */ }) {
