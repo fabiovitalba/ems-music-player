@@ -75,7 +75,6 @@ fun PlaySongLayout(
     )
 
     Box(modifier = modifier
-        /*.background(brush = gradientBrush)*/
         .fillMaxSize()
         .wrapContentSize(Alignment.Center)
     ) {
