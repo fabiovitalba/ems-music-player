@@ -93,8 +93,8 @@ private fun returnToAlbumSelection(
     viewModel: SongPlayerViewModel,
     navController: NavHostController
 ) {
-    viewModel.resetSongPlayer()
     navController.popBackStack(SongPlayerScreen.AlbumList.name, inclusive = false)
+    viewModel.resetSongPlayer()
 }
 
 private fun returnToSongSelection(

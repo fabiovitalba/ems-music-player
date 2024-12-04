@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -52,7 +54,7 @@ fun AlbumCard(
     onSelectAlbum: (albumIndex: Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberScrollState(0)
+    val scrollState = rememberScrollState()
     OutlinedCard(
         modifier = modifier
             .padding(16.dp),
@@ -86,15 +88,21 @@ fun AlbumCard(
                     },
                 contentScale = ContentScale.Crop
             )
-            Text(
-                text = "${album.title} - ${album.mainArtist}",
+            Box(
                 modifier = modifier
-                    .padding(16.dp)
-                    .height(28.dp)
-                    .horizontalScroll(scrollState),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
+                    .width(300.dp)
+                    .horizontalScroll(scrollState)
+                    .size(width = 120.dp, height = 60.dp),
+            ) {
+                Text(
+                    text = "${album.title} - ${album.mainArtist}",
+                    modifier = modifier
+                        .height(28.dp)
+                        .fillMaxWidth(),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }

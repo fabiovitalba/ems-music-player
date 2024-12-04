@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,6 +38,7 @@ import com.unibz.songplayer.data.Album
 import com.unibz.songplayer.data.Datasource
 import com.unibz.songplayer.data.Song
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
+import kotlin.concurrent.timer
 
 val gradientBrush =
     Brush.verticalGradient(
@@ -49,6 +51,7 @@ val gradientBrush =
 fun PlaySongLayout(
     album: Album,
     song: Song,
+    //songProgress: Float,
     isPlaying: Boolean,
     onNextButtonClicked: () -> Unit = {},
     onPrevButtonClicked: () -> Unit = {},
@@ -59,6 +62,11 @@ fun PlaySongLayout(
 ) {
     // App State
     var songProgress by rememberSaveable { mutableFloatStateOf(0.0f) }
+    //LaunchedEffect(
+    //    key1 = song
+    //) {
+    //    timer()
+    //}
 
     Box(modifier = modifier
         /*.background(brush = gradientBrush)*/
