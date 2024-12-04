@@ -14,9 +14,11 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.unibz.songplayer.R
 import com.unibz.songplayer.data.Datasource
 import com.unibz.songplayer.data.Song
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
@@ -34,7 +36,7 @@ fun SongListLayout(
             modifier = modifier
                 .padding(12.dp)
         ) {
-            Text("Go Back"/* stringResource(R.string.goBack) */)
+            Text(stringResource(R.string.go_back))
         }
         Spacer(modifier.height(2.dp))
         LazyColumn( modifier = modifier ) {
