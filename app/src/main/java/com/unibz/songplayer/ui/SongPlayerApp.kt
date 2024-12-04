@@ -11,7 +11,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unibz.songplayer.data.Datasource
 
@@ -26,12 +25,6 @@ fun SongPlayerApp (
     viewModel: SongPlayerViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = SongPlayerScreen.valueOf(
-        backStackEntry?.destination?.route ?: SongPlayerScreen.AlbumList.name
-    )
     val albums = Datasource().loadAlbums()
 
     Scaffold(
@@ -61,10 +54,11 @@ fun SongPlayerApp (
                     album = albums[uiState.currentAlbumId],
                     song = albums[uiState.currentAlbumId].songs[uiState.currentSongId],
                     isPlaying = !uiState.songPaused,
-                    onBackButtonClicked = { returnToSongSelection(viewModel, navController) },
+                    onBackButtonClicked = { returnToSongSelection(navController) },
                     onPlayButtonClicked = { playPauseSong(viewModel) },
                     onNextButtonClicked = { skipToNextSong(viewModel) },
-                    onPrevButtonClicked = { skipToPreviousSong(viewModel) }
+                    onPrevButtonClicked = { skipToPreviousSong(viewModel) },
+                    onSongIsFinished = { skipToNextSong(viewModel) }
                 )
             }
         }
@@ -98,7 +92,6 @@ private fun returnToAlbumSelection(
 }
 
 private fun returnToSongSelection(
-    viewModel: SongPlayerViewModel,
     navController: NavHostController
 ) {
     navController.popBackStack(SongPlayerScreen.SongList.name, inclusive = false)

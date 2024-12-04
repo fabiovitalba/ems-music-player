@@ -1,5 +1,6 @@
 package com.unibz.songplayer.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,8 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,20 +37,12 @@ import com.unibz.songplayer.data.Album
 import com.unibz.songplayer.data.Datasource
 import com.unibz.songplayer.data.Song
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
-import kotlin.concurrent.timer
-
-val gradientBrush =
-    Brush.verticalGradient(
-        colors = listOf(Color.Red, Color.Blue, Color.Green),
-        startY = 0.0f,
-        endY = 3000.0f
-    )
+import kotlinx.coroutines.delay
 
 @Composable
 fun PlaySongLayout(
     album: Album,
     song: Song,
-    //songProgress: Float,
     isPlaying: Boolean,
     onNextButtonClicked: () -> Unit = {},
     onPrevButtonClicked: () -> Unit = {},
@@ -61,12 +52,27 @@ fun PlaySongLayout(
     modifier: Modifier = Modifier
 ) {
     // App State
-    var songProgress by rememberSaveable { mutableFloatStateOf(0.0f) }
-    //LaunchedEffect(
-    //    key1 = song
-    //) {
-    //    timer()
-    //}
+    var songProgress by rememberSaveable { mutableFloatStateOf(0.00f) }
+    val songProgressDelta = (1f / song.duration)
+    Log.i("PlaySongScreen","song.duration ${song.duration}, songProgressDelta $songProgressDelta")
+
+    // LaunchEffect is triggered when isPlaying or songProgress changes.
+    LaunchedEffect(
+        key1 = isPlaying,
+        key2 = songProgress, block = {
+            delay(1_000)
+            Log.i("PlaySongScreen","refresh done, playing? $isPlaying")
+            if (isPlaying) {
+                if (songProgress < 1f) {
+                    songProgress += songProgressDelta
+                } else {
+                    songProgress = 0.00f
+                    onSongIsFinished()
+                }
+            }
+            Log.i("PlaySongScreen","progress $songProgress")
+        }
+    )
 
     Box(modifier = modifier
         /*.background(brush = gradientBrush)*/
@@ -128,13 +134,19 @@ fun PlaySongLayout(
                 color = MaterialTheme.colorScheme.secondary
             )
             Row {
-                FilledTonalButton(onClick = onPrevButtonClicked ) {
+                FilledTonalButton(onClick = {
+                    songProgress = 0.00f
+                    onPrevButtonClicked()
+                } ) {
                     Text("PREV"/* stringResource(R.string.next) */)
                 }
                 Button(onClick = onPlayButtonClicked ) {
-                    Text("PLAY/PAUSE"/* stringResource(R.string.next) */)
+                    Text(if (isPlaying) "PAUSE" else "PLAY"/* stringResource(R.string.next) */)
                 }
-                FilledTonalButton(onClick = onNextButtonClicked ) {
+                FilledTonalButton(onClick = {
+                    songProgress = 0.00f
+                    onNextButtonClicked()
+                } ) {
                     Text("NEXT"/* stringResource(R.string.next) */)
                 }
             }

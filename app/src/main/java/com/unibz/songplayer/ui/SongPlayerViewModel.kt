@@ -25,27 +25,11 @@ class SongPlayerViewModel : ViewModel() {
         playlist = mutableListOf() // Empty List
     }
 
-    fun selectAlbumByName(selectedAlbumTitle: String) {
-        albums.forEachIndexed() { index, album ->
-            if (album.title.equals(selectedAlbumTitle, ignoreCase = true)) {
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        currentAlbumId = index,
-                        currentSongId = 0,
-                        currentSongProgress = 0.0f,
-                        songPaused = currentState.songPaused
-                    )
-                }
-            }
-        }
-    }
-
     fun selectAlbumById(selectedAlbumId: Int) {
         _uiState.update { currentState ->
             currentState.copy(
                 currentAlbumId = selectedAlbumId,
                 currentSongId = 0,
-                currentSongProgress = 0.0f,
                 songPaused = currentState.songPaused
             )
         }
@@ -56,7 +40,6 @@ class SongPlayerViewModel : ViewModel() {
             currentState.copy(
                 currentAlbumId = currentState.currentAlbumId,
                 currentSongId = selectedSongId,
-                currentSongProgress = 0.0f,
                 songPaused = currentState.songPaused
             )
         }
@@ -78,7 +61,6 @@ class SongPlayerViewModel : ViewModel() {
             currentState.copy(
                 currentAlbumId = currentState.currentAlbumId,
                 currentSongId = nextSongId,
-                currentSongProgress = 0.0f,
                 songPaused = currentState.songPaused
             )
         }
@@ -92,13 +74,8 @@ class SongPlayerViewModel : ViewModel() {
             currentState.copy(
                 currentAlbumId = currentState.currentAlbumId,
                 currentSongId = nextSongId,
-                currentSongProgress = 0.0f,
                 songPaused = currentState.songPaused
             )
         }
-    }
-
-    fun advanceSongProgress() {
-
     }
 }
