@@ -25,8 +25,6 @@ fun SongPlayerApp (
     viewModel: SongPlayerViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    val albums = Datasource().loadAlbums()
-
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -38,21 +36,21 @@ fun SongPlayerApp (
         ) {
             composable(route = SongPlayerScreen.AlbumList.name) {
                 AlbumsListLayout(
-                    albumList = albums,
-                    onSelectAlbum = { albumId -> selectAlbumByName(viewModel, navController, albumId) }
+                    albumList = uiState.albums,
+                    onSelectAlbum = { albumId -> selectAlbum(viewModel, navController, albumId) }
                 )
             }
             composable(route = SongPlayerScreen.SongList.name) {
                 SongListLayout(
-                    songList = albums[uiState.currentAlbumId].songs,
+                    songList = uiState.albums[uiState.currentAlbumId].songs,
                     onSelectSong = { songId -> selectSong(viewModel, navController, songId) },
                     onBackButtonClicked = { returnToAlbumSelection(viewModel, navController) }
                 )
             }
             composable(route = SongPlayerScreen.PlaySong.name) {
                 PlaySongLayout(
-                    album = albums[uiState.currentAlbumId],
-                    song = albums[uiState.currentAlbumId].songs[uiState.currentSongId],
+                    album = uiState.albums[uiState.currentAlbumId],
+                    song = uiState.albums[uiState.currentAlbumId].songs[uiState.currentSongId],
                     isPlaying = !uiState.songPaused,
                     onBackButtonClicked = { returnToSongSelection(navController) },
                     onPlayButtonClicked = { playPauseSong(viewModel) },
@@ -65,7 +63,7 @@ fun SongPlayerApp (
     }
 }
 
-private fun selectAlbumByName(
+private fun selectAlbum(
     viewModel: SongPlayerViewModel,
     navController: NavHostController,
     albumId: Int

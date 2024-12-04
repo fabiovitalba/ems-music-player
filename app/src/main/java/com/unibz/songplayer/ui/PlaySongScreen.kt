@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ import com.unibz.songplayer.data.Album
 import com.unibz.songplayer.data.Datasource
 import com.unibz.songplayer.data.Song
 import com.unibz.songplayer.ui.theme.SongPlayerTheme
+import com.unibz.songplayer.R
 import kotlinx.coroutines.delay
 
 @Composable
@@ -84,9 +87,10 @@ fun PlaySongLayout(
         ) {
             Row {
                 OutlinedButton(onClick = onBackButtonClicked) {
-                    Text("Go Back"/* stringResource(R.string.next) */)
+                    Text(stringResource(R.string.go_back))
                 }
             }
+            Spacer(modifier.height(24.dp))
             Image(
                 painter = painterResource(album.albumArt),
                 contentDescription = album.title,
@@ -137,16 +141,18 @@ fun PlaySongLayout(
                     songProgress = 0.00f
                     onPrevButtonClicked()
                 } ) {
-                    Text("PREV"/* stringResource(R.string.next) */)
+                    Text(stringResource(R.string.previous))
                 }
+                Spacer(modifier.width(12.dp))
                 Button(onClick = onPlayButtonClicked ) {
-                    Text(if (isPlaying) "PAUSE" else "PLAY"/* stringResource(R.string.next) */)
+                    Text(if (isPlaying) stringResource(R.string.pause) else stringResource(R.string.play))
                 }
+                Spacer(modifier.width(12.dp))
                 FilledTonalButton(onClick = {
                     songProgress = 0.00f
                     onNextButtonClicked()
                 } ) {
-                    Text("NEXT"/* stringResource(R.string.next) */)
+                    Text(stringResource(R.string.next))
                 }
             }
         }

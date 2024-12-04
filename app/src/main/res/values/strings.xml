@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Song Player</string>
-    <string name="next">Next</string>
-    <string name="previous">Prev.</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
+    <string name="next">NEXT</string>
+    <string name="previous">PREV</string>
+    <string name="play">PLAY</string>
+    <string name="pause">PAUSE</string>
+    <string name="go_back">Go back</string>
 </resources>
